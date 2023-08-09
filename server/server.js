@@ -5,7 +5,7 @@ require('dotenv').config({
 });
 
 const { DB_USERNAME, DB_PASSWORD } = process.env;
-const connectionString = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@cluster0.ta4kr3w.mongodb.net/?retryWrites=true&w=majority`
+const connectionString = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@cluster0.ta4kr3w.mongodb.net/?retryWrites=true&w=majority`;
 
 // REPLACE WITH REAL SERVER CONNECTION
 mongoose.connect(connectionString, {
@@ -29,5 +29,5 @@ mongoose.connect(connectionString, {
         server.close();
     })
 })
-.catch((err) => console.log('Error connecting to your mongodb database. -- '. err))
+.catch((err) => console.log('Error connecting to your mongodb database. -- ', err));
 
