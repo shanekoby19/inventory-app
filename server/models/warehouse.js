@@ -10,6 +10,10 @@ const warehouseSchema = new mongoose.Schema({
         ref: 'User',
         required: [true, 'A warehouse must have at least one owner.']
     }],
+    shelves: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Shelf',
+    }]
 });
 
 warehouseSchema.pre('find', async function () {
