@@ -26,6 +26,37 @@ const addShelf = catchAsync(async (req, res, next) => {
     })
 });
 
+const updateShelf = catchAsync(async(req, res, next) => {
+    const shelfId = req.params.id;
+
+    const shelf = await Shelf.findByIdAndUpdate(shelfId, {
+        name: req.body.name,
+    }, { new: true });
+
+    res.status(200).json({
+        shelf
+    });
+});
+
+const deleteShelf = catchAsync(async(req, res, next) => {
+    const warehouseId = req.params.warehouseId;
+    const shelfId = req.params.id;
+
+    // Remove the shelf from the warehouse
+    const warehouse = await Warehouse.findByIdAndUpdate(warehouseId, {
+        $pull: { shelves: shelfId }
+    }, { new: true });
+
+    // Delete the shelf from the Shelf collection
+    await Shelf.findByIdAndDelete(shelfId);
+
+    res.status(200).json({
+        warehouse
+    });
+});
+
 module.exports = {
-    addShelf
+    addShelf,
+    deleteShelf,
+    updateShelf
 }
