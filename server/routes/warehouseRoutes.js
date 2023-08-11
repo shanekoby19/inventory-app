@@ -1,4 +1,5 @@
 const express = require('express');
+const shelfRouter = require('./shelfRoutes.js');
 
 const {
     addWarehouse, 
@@ -16,6 +17,9 @@ warehouseRouter
 warehouseRouter
     .route('/:id')
     .delete(deleteWarehouse);
+
+// Nested shelf routes
+warehouseRouter.use('/:warehouseId/shelf', shelfRouter)
 
 
 module.exports = warehouseRouter;

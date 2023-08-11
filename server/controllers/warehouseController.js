@@ -28,7 +28,7 @@ const getAllWarehouses = catchAsync(async(req, res, next) => {
     res.status(200).json({
         warehouses
     })
-})
+});
 
 module.exports = {
     addWarehouse,
