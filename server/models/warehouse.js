@@ -12,6 +12,11 @@ const warehouseSchema = new mongoose.Schema({
     }],
 });
 
+warehouseSchema.pre('find', async function () {
+    // Use 'this' to access the query being executed
+    this.populate('owners');
+});
+
 const Warehouse = mongoose.model('Warehouse', warehouseSchema);
 
 module.exports = Warehouse;

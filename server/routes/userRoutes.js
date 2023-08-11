@@ -4,7 +4,8 @@ const {
     getAllUsers,
     addUser,
     deleteUser,
-    updateUser
+    updateUser,
+    getAllWarehouses
 } = require('../controllers/userController');
 
 const userRouter = express.Router();
@@ -18,5 +19,9 @@ userRouter
     .route('/:id')
     .delete(deleteUser)
     .patch(updateUser);
+
+userRouter
+    .route('/:id/warehouses')
+    .get(getAllWarehouses);
 
 module.exports = userRouter;
