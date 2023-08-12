@@ -27,17 +27,17 @@ warehouseRouter
 
 // Manages shelves in a warehouse
 warehouseRouter
-    .route('/:parentId/shelf')
+    .route('/:parentId/shelves')
     .post(addChildToParent(Warehouse, Shelf, 'shelves'));
 
 warehouseRouter
-    .route('/:parentId/shelf/:childId')
+    .route('/:parentId/shelves/:childId')
     .delete(removeChildFromParent(Warehouse, Shelf, 'shelves'));
 
 // Manages containers in a warehouse
 warehouseRouter
     .route('/:parentId/containers')
-    .get(addChildToParent(Warehouse, Container, 'containers'))
+    .post(addChildToParent(Warehouse, Container, 'containers'))
 
 warehouseRouter
     .route('/:parentId/containers/:childId')

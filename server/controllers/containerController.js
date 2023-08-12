@@ -1,54 +1,17 @@
 const Container = require('../models/container');
-const Warehouse = require('../models/warehouse');
-const Shelf = require('../models/shelf');
 
 const catchAsync = require('../utils/catchAsync');
 
-const addContainerToWarehouse = catchAsync(async (req, res, next) => {
-    const warehouseId = req.params.warehouseId;
-    
-    // Create the container WITHOUT saving
-    const container = new Container({
-        name: req.body.name,
-        items: req.body.items || []
-    });
+const updateContainer = catchAsync(async(req, res, next) => {
+    const containerId = req.params.containerId;
 
-    const arrayField = 'containers';
+    const updatedContainer = await Container.findByIdAndUpdate(containerId, {
+        name: req.body.name
+    }, { new: true });
 
-    const warehouse = await Warehouse.findByIdAndUpdate(warehouseId, {
-        $push: { [arrayField]: container._id }
-    });
-
-    await container.save();
-
-    res.status(201).json({
-        container,
-        warehouse
+    res.status(200).json({
+        container: updatedContainer
     })
 });
 
-const addContainerToShelf = catchAsync(async (req, res, next) => {
-    const shelfId = req.params.shelfId;
-    
-    // Create the container WITHOUT saving
-    const container = new Container({
-        name: req.body.name,
-        items: req.body.items || []
-    });
-
-    const shelf = await Shelf.findByIdAndUpdate(shelfId, {
-        $push: { containers: container._id }
-    });
-
-    await container.save();
-
-    res.status(201).json({
-        container,
-        shelf
-    })
-});
-
-module.exports = {
-    addContainerToWarehouse,
-    addContainerToShelf,
-}
+module.exports = updateContainer;

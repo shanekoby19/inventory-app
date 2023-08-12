@@ -13,7 +13,7 @@ const addChildToParent = (ParentModel, ChildModel, arrayField) => {
         // Add the child to the parent.
         const parent = await ParentModel.findByIdAndUpdate(parentId, {
             $push: { [arrayField]: child._id }
-        });
+        }, { new: true });
 
         // save the child
         await child.save();
@@ -26,6 +26,26 @@ const addChildToParent = (ParentModel, ChildModel, arrayField) => {
     });
 };
 
+const removeChildFromParent = (ParentModel, ChildModel, arrayField) => {
+    return catchAsync(async(req, res, next) => {
+        const parentId = req.params.parentId;
+        const childId = req.params.childId;
+    
+        // Remove the shelf from the warehouse
+        const parent = await ParentModel.findByIdAndUpdate(parentId, {
+            $pull: { [arrayField]: childId }
+        }, { new: true });
+    
+        // Delete the shelf from the Shelf collection
+        await ChildModel.findByIdAndDelete(childId);
+    
+        res.status(200).json({
+            [ParentModel.modelName.toLowerCase()]: parent
+        });
+    });
+}
+
 module.exports = {
-    addChildToParent
+    addChildToParent,
+    removeChildFromParent
 }
