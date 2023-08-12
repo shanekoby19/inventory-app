@@ -10,8 +10,8 @@ const itemSchema = new mongoose.Schema({
     },
     quantity: {
         type: Number,
-        default: 0,
-        min: [0, "The quantity cannot be negative."]
+        default: 1,
+        min: [1, "The quantity has to be at least 1."]
     }
 });
 

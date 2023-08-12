@@ -9,6 +9,10 @@ const shelfSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Container'
     }],
+    items: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Item'
+    }]
 });
 
 const Shelf = mongoose.model('Shelf', shelfSchema);

@@ -17,6 +17,10 @@ const warehouseSchema = new mongoose.Schema({
     containers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Container'
+    }],
+    items: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Item'
     }]
 });
 

@@ -35,8 +35,10 @@ const removeChildFromParent = (ParentModel, ChildModel, parentRelationArray, chi
 
         const child = await ChildModel.findById(childId);
 
+        console.log(child[childRelationArray])
+
         // Ensure the child has no relational data tied to it.
-        if(child[childRelationArray].length > 0) {
+        if(child[childRelationArray] && child[childRelationArray].length > 0) {
             return next(new AppError(`You cannot delete this item because it still has ${childRelationArray.slice(0, -1)}(s) in it.`));
         }
     
