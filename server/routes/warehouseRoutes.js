@@ -1,6 +1,7 @@
 const express = require('express');
-const shelfRouter = require('./shelfRoutes.js');
+
 const Warehouse = require('../models/warehouse');
+const Shelf = require('../models/shelf');
 const Container = require('../models/container');
 
 const {
@@ -10,7 +11,7 @@ const {
 } = require('../controllers/warehouseController.js');
 
 const { 
-    addChildToParent 
+    addChildToParent, removeChildFromParent 
 } = require('../utils/utilsController.js');
 
 const warehouseRouter = express.Router();
@@ -24,10 +25,24 @@ warehouseRouter
     .route('/:id')
     .delete(deleteWarehouse);
 
-// Nested shelf routes
-warehouseRouter.use('/:warehouseId/shelf', shelfRouter)
+// Manages shelves in a warehouse
+warehouseRouter
+    .route('/:parentId/shelf')
+    .post(addChildToParent(Warehouse, Shelf, 'shelves'));
 
-warehouseRouter.use('/:parentId/containers', addChildToParent(Warehouse, Container, 'containers'))
+warehouseRouter
+    .route('/:parentId/shelf/:childId')
+    .delete(removeChildFromParent(Warehouse, Shelf, 'shelves'));
+
+// Manages containers in a warehouse
+warehouseRouter
+    .route('/:parentId/containers')
+    .get(addChildToParent(Warehouse, Container, 'containers'))
+
+warehouseRouter
+    .route('/:parentId/containers/:childId')
+    .delete(removeChildFromParent(Warehouse, Container, 'containers'))
+
 
 
 module.exports = warehouseRouter;
