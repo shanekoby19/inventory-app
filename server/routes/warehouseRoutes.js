@@ -32,7 +32,7 @@ warehouseRouter
 
 warehouseRouter
     .route('/:parentId/shelves/:childId')
-    .delete(removeChildFromParent(Warehouse, Shelf, 'shelves'));
+    .delete(removeChildFromParent(Warehouse, Shelf, 'shelves', 'containers'));
 
 // Manages containers in a warehouse
 warehouseRouter
@@ -41,7 +41,7 @@ warehouseRouter
 
 warehouseRouter
     .route('/:parentId/containers/:childId')
-    .delete(removeChildFromParent(Warehouse, Container, 'containers'))
+    .delete(removeChildFromParent(Warehouse, Container, 'containers', 'items'))
 
 
 

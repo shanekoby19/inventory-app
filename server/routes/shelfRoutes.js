@@ -26,6 +26,6 @@ shelfRouter
 
 shelfRouter
     .route('/:parentId/containers/:childId') 
-    .delete(removeChildFromParent(Shelf, Container, 'containers'))
+    .delete(removeChildFromParent(Shelf, Container, 'containers', 'items'))
 
 module.exports = shelfRouter;
