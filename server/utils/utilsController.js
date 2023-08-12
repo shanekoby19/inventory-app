@@ -1,6 +1,7 @@
 const catchAsync = require('./catchAsync');
+const AppError = require('./AppError');
 
-const addChildToParent = (ParentModel, ChildModel, arrayField) => {
+const addChildToParent = (ParentModel, ChildModel, parentRelationArray) => {
     return catchAsync(async (req, res, next) => {
         const parentId = req.params.parentId;
         
@@ -12,7 +13,7 @@ const addChildToParent = (ParentModel, ChildModel, arrayField) => {
 
         // Add the child to the parent.
         const parent = await ParentModel.findByIdAndUpdate(parentId, {
-            $push: { [arrayField]: child._id }
+            $push: { [parentRelationArray]: child._id }
         }, { new: true });
 
         // save the child
@@ -26,14 +27,23 @@ const addChildToParent = (ParentModel, ChildModel, arrayField) => {
     });
 };
 
-const removeChildFromParent = (ParentModel, ChildModel, arrayField) => {
+const removeChildFromParent = (ParentModel, ChildModel, parentRelationArray, childRelationArray) => {
     return catchAsync(async(req, res, next) => {
         const parentId = req.params.parentId;
         const childId = req.params.childId;
+
+        const child = await ChildModel.findById(childId);
+
+        console.log("Child is: ", child);
+
+        // Ensure the child has no relational data tied to it.
+        if(child[childRelationArray].length > 0) {
+            return next(new AppError(`You cannot delete this item because it still has ${childRelationArray.slice(0, -1)}(s) in it.`));
+        }
     
         // Remove the shelf from the warehouse
         const parent = await ParentModel.findByIdAndUpdate(parentId, {
-            $pull: { [arrayField]: childId }
+            $pull: { [parentRelationArray]: childId }
         }, { new: true });
     
         // Delete the shelf from the Shelf collection
