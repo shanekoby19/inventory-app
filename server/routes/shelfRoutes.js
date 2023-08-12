@@ -1,6 +1,7 @@
 const express = require('express');
 const Shelf = require('../models/shelf');
 const Container = require('../models/container');
+const Item = require('../models/item');
 
 const {
     updateShelf
@@ -22,10 +23,20 @@ shelfRouter
 // Manage containers in a shelf
 shelfRouter
     .route('/:parentId/containers') 
-    .post(addChildToParent(Shelf, Container, 'containers'))
+    .post(addChildToParent(Shelf, Container, 'containers'));
 
 shelfRouter
     .route('/:parentId/containers/:childId') 
-    .delete(removeChildFromParent(Shelf, Container, 'containers', 'items'))
+    .delete(removeChildFromParent(Shelf, Container, 'containers', 'items'));
+
+
+// Manages items on a shelf
+shelfRouter
+    .route('/:parentId/items')
+    .post(addChildToParent(Shelf, Item, 'items'))
+
+shelfRouter
+    .route('/:parentId/items/:childId')
+    .delete(removeChildFromParent(Shelf, Item, 'items', 'undefined'))
 
 module.exports = shelfRouter;

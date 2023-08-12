@@ -3,6 +3,7 @@ const express = require('express');
 const Warehouse = require('../models/warehouse');
 const Shelf = require('../models/shelf');
 const Container = require('../models/container');
+const Item = require('../models/item');
 
 const {
     addWarehouse, 
@@ -43,6 +44,13 @@ warehouseRouter
     .route('/:parentId/containers/:childId')
     .delete(removeChildFromParent(Warehouse, Container, 'containers', 'items'))
 
+// Manages items in a warehouse
+warehouseRouter
+    .route('/:parentId/items')
+    .post(addChildToParent(Warehouse, Item, 'items'))
 
+warehouseRouter
+    .route('/:parentId/items/:childId')
+    .delete(removeChildFromParent(Warehouse, Item, 'items', 'undefined'))
 
 module.exports = warehouseRouter;

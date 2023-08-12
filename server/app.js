@@ -5,6 +5,7 @@ const userRouter = require('./routes/userRoutes');
 const warehouseRouter = require('./routes/warehouseRoutes');
 const shelfRouter = require('./routes/shelfRoutes');
 const containerRouter = require('./routes/containerRoutes');
+const itemRouter = require('./routes/itemRoutes');
 
 const appErrorHandler = require('./utils/appErrorHandler');
 
@@ -19,6 +20,7 @@ app.use('/users', userRouter);
 app.use('/warehouses', warehouseRouter);
 app.use('/shelves', shelfRouter);
 app.use('/containers', containerRouter);
+app.use('/items', itemRouter);
 
 // Error handling
 app.use(appErrorHandler);
