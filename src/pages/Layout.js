@@ -2,10 +2,12 @@ import { Outlet } from 'react-router-dom';
 
 import Navigation from '../components/Navigation';
 
+import '../styles/pages/Layout.scss';
+
 const Layout = () => {
     return (
         <body>
-            <Navigation />
+            <Navigation/>
             <main>
                 <Outlet/>
             </main>
