@@ -1,0 +1,15 @@
+.nav {
+    height: 2.5rem;
+    background-color: rgb(234, 234, 234);
+    padding: 0.5rem 2rem;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &__item {
+        font-size: 1.2rem;
+        color: black;
+        text-decoration: none;
+    }
+}
