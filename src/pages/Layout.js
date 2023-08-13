@@ -6,12 +6,12 @@ import '../styles/pages/Layout.scss';
 
 const Layout = () => {
     return (
-        <body>
+        <div className='layout'>
             <Navigation/>
             <main>
-                <Outlet/>
+                <Outlet className='outlet'/>
             </main>
-        </body>
+        </div>
     )
 }
 

@@ -5,10 +5,19 @@ import '../styles/components/Navigation.scss';
 const Navigation = () => {
     return (
         <nav className='nav'>
-            <NavLink
-                to="/home" 
-                className='nav__item'
-            >Home</NavLink>
+            <div className='nav__items'>
+                <NavLink
+                    to="/" 
+                    className='nav__item'
+                >Manage</NavLink>
+                <NavLink
+                    to="/reports" 
+                    className='nav__item'
+                >Reports</NavLink>
+            </div>
+
+            <div className='nav__icon'>
+            </div>
         </nav>
     )
 }

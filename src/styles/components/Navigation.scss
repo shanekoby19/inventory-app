@@ -11,5 +11,14 @@
         font-size: 1.2rem;
         color: black;
         text-decoration: none;
+        &:not(:last-child) {
+            margin-right: 2rem;
+        }
     }
+}
+
+.active {
+    text-decoration: underline;
+    font-weight: bold;
+    text-underline-offset: 0.3rem;
 }
