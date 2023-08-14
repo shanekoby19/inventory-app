@@ -1,10 +1,15 @@
 const express = require('express');
+const User = require('../models/user');
 
 const {
-    getAllUsers,
-    addUser,
+    get,
+    getAll,
+    create,
+    update,
+} = require('../utils/utilsController');
+
+const {
     deleteUser,
-    updateUser,
     getAllWarehouses
 } = require('../controllers/userController');
 
@@ -12,13 +17,14 @@ const userRouter = express.Router();
 
 userRouter
     .route('/')
-    .get(getAllUsers)
-    .post(addUser);
+    .get(getAll(User))
+    .post(create(User, "firstName", "lastName", "email"));
 
 userRouter
     .route('/:id')
+    .get(get(User, 'id'))
     .delete(deleteUser)
-    .patch(updateUser);
+    .patch(update(User, 'id', 'firstName', 'lastName', 'email'));
 
 userRouter
     .route('/:id/warehouses')
