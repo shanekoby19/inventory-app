@@ -16,6 +16,6 @@ itemRouter
 itemRouter
     .route('/:id')
     .get(get(Item, "id"))
-    .patch(update(Item, "id", "name", "description", "quanity"));
+    .patch(update(Item, "id", "name", "description", "quantity"));
 
 module.exports = itemRouter
