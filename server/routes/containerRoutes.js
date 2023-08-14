@@ -2,17 +2,25 @@ const express = require('express');
 const Container = require('../models/container');
 const Item = require('../models/item');
 
-const updateContainer = require('../controllers/containerController');
 const {
     addChildToParent,
-    removeChildFromParent
+    removeChildFromParent,
+    update,
+    get,
+    getAll
 } = require('../utils/utilsController');
 
 const containerRouter = express.Router();
 
+// Manage Individual containers
 containerRouter
-    .route('/:containerId')
-    .patch(updateContainer)
+    .route('/')
+    .get(getAll(Container));
+
+containerRouter
+    .route('/:id')
+    .get(get(Container, "id"))
+    .patch(update(Container, "id", "name"))
 
 
 // Manages items in a warehouse
