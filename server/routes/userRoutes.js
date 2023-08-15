@@ -18,13 +18,13 @@ const userRouter = express.Router();
 userRouter
     .route('/')
     .get(getAll(User))
-    .post(create(User, "firstName", "lastName", "email"));
+    .post(create(User, "firstName", "lastName", "email", "password"));
 
 userRouter
     .route('/:id')
     .get(get(User, 'id'))
     .delete(deleteUser)
-    .patch(update(User, 'id', 'firstName', 'lastName', 'email'));
+    .patch(update(User, 'id', 'firstName', 'lastName', 'email', 'password'));
 
 userRouter
     .route('/:id/warehouses')
