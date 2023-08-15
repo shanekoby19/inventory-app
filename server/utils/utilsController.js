@@ -4,10 +4,10 @@ const AppError = require('./AppError');
 /**
  * A function that gets an item from a collection the database given the item id.
  * @param {*} Model - The model you want to search in.
- * @param {string} idParam  - The id parameter name set in the url of the express route.
+ * @param {string} idParam  - The id parameter name set in the url of the express route. Defaults to "id".
  * @returns - A middleware function to use in express.
  */
-const get = (Model, idParam) => {
+const get = (Model, idParam="id") => {
     return catchAsync(async(req, res, next) => {
         // Extract the id.
         const id = req.params[idParam];
@@ -41,18 +41,12 @@ const getAll = (Model) => {
 /**
  * A utility function to create objects in the database given a body and some data.
  * @param {*} Model - The model you want to use to add this object to the database.
- * @param  {...string} props - The properties needed to successfully add the object to the database.
  * @returns - A middleware function to use in express.
  */
-const create = (Model, ...props) => {
+const create = (Model) => {
     return catchAsync(async(req, res, next) => {
-        // Extract the data given the rest parameters
-        const data = {};
-        props.forEach((value) => {
-            data[value] = req.body[value];
-        });
-
-        const thing = await Model.create(data);
+        // req.data will contain any valid data passed in that matches the model.
+        const thing = await Model.create(req.data);
 
         res.status(201).json({
             [Model.modelName.toLowerCase()]: thing
@@ -63,22 +57,15 @@ const create = (Model, ...props) => {
 /**
  * A utility function to update objects in the database given a body and some data.
  * @param {*} Model - The model you want to use to update this object in the database.
- * @param {string} idParam  - The id parameter name set in the url of the express route.
- * @param  {...string} props - The properties needed to successfully update the object in the database.
+ * @param {string} idParam  - The id parameter name set in the url of the express route. Defaults to "id"
  * @returns - A middleware function to use in express.
  */
-const update = (Model, paramId, ...props) => {
+const update = (Model, paramId="id") => {
     return catchAsync(async(req, res, next) => {
         // Extract the id from the incoming request.
         const id = req.params[paramId];
 
-        // Extract the data given the rest parameters
-        const data = {};
-        props.forEach((value) => {
-            data[value] = req.body[value];
-        });
-
-        const thing = await Model.findByIdAndUpdate(id, data, {
+        const thing = await Model.findByIdAndUpdate(id, req.data, {
             new: true,
             runValidators: true,
         })
@@ -92,10 +79,10 @@ const update = (Model, paramId, ...props) => {
 /**
  * A function that removes an item from the database.
  * @param {*} Model - The model you want to use to add this object to the database.
- * @param {string} idParam  - The id parameter name set in the url of the express route.
+ * @param {string} idParam  - The id parameter name set in the url of the express route. Defaults to "id".
  * @returns - A middleware function to use in express.
  */
-const remove = (Model, idParam) => {
+const remove = (Model, idParam="id") => {
     return catchAsync(async(req, res, next) => {
         const id = req.params[idParam];
     
@@ -111,11 +98,7 @@ const addChildToParent = (ParentModel, ChildModel, parentRelationArray) => {
         const parentId = req.params.parentId;
         
         // Create the child object WITHOUT saving
-        const child = new ChildModel({
-            name: req.body.name,
-            description: req.body.description,
-            quantity: req.body.quanity,
-        });
+        const child = new ChildModel(req.data);
 
         // Add the child to the parent.
         const parent = await ParentModel.findByIdAndUpdate(parentId, {
@@ -159,6 +142,24 @@ const removeChildFromParent = (ParentModel, ChildModel, parentRelationArray, chi
     });
 }
 
+const addDataPropToRequestBody = (Model) => {
+    return (req, res, next) => {
+        // Get the keys given the object.
+        const keys = Object.keys(Model.schema.obj);
+
+        // Create an item object to hold the data values.
+        const data = {};
+
+        // Look through the request model keys and store any data property that matches the model.
+        keys.forEach(key => data[key] = req.body[key]);
+
+        // Store the data on the request for the next middleware
+        req.data = {...data};
+
+        next();
+    }
+}
+
 module.exports = {
     addChildToParent,
     removeChildFromParent,
@@ -166,5 +167,6 @@ module.exports = {
     remove,
     get,
     getAll,
-    update
+    update,
+    addDataPropToRequestBody,
 }
