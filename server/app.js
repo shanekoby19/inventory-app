@@ -13,21 +13,25 @@ const itemRouter = require('./routes/itemRoutes');
 const authRouter = require('./routes/authRoutes');
 
 const appErrorHandler = require('./utils/appErrorHandler');
+const { isAuthorized } = require('./controllers/authController');
 
 const app = express();
 
+// Third party middleware
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser(process.env.COOKIE_SECRET))
 
 
 // Routers
+app.use('/auth', authRouter);
+
+app.use(isAuthorized); // Authorize the user for all database resources
 app.use('/users', userRouter);
 app.use('/warehouses', warehouseRouter);
 app.use('/shelves', shelfRouter);
 app.use('/containers', containerRouter);
 app.use('/items', itemRouter);
-app.use('/auth', authRouter);
 
 // Error handling
 app.use(appErrorHandler);
