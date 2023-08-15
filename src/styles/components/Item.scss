@@ -1,5 +1,8 @@
 .item {
     background-color: rgb(192, 104, 104);
     border-radius: 0.5rem;
-    padding: 0.3rem 0.8rem;
+    padding: 1rem 2rem;
+
+    display: flex;
+    justify-content: space-between;
 }
