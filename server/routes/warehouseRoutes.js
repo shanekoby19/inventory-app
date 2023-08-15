@@ -13,6 +13,7 @@ const {
     update,
     create,
     remove,
+    addDataPropToRequestBody
 } = require('../utils/utilsController.js');
 
 const warehouseRouter = express.Router();
@@ -20,18 +21,18 @@ const warehouseRouter = express.Router();
 warehouseRouter
     .route('/')
     .get(getAll(Warehouse))
-    .post(create(Warehouse, "name", "owners"));
+    .post(addDataPropToRequestBody(Warehouse), create(Warehouse));
 
 warehouseRouter
     .route('/:id')
-    .get(get(Warehouse, "id"))
-    .patch(update(Warehouse, "id", "name"))
-    .delete(remove(Warehouse, "id"));
+    .get(get(Warehouse))
+    .patch(addDataPropToRequestBody(Warehouse), update(Warehouse))
+    .delete(remove(Warehouse));
 
 // Manages shelves in a warehouse
 warehouseRouter
     .route('/:parentId/shelves')
-    .post(addChildToParent(Warehouse, Shelf, 'shelves'));
+    .post(addDataPropToRequestBody(Shelf), addChildToParent(Warehouse, Shelf, 'shelves'));
 
 warehouseRouter
     .route('/:parentId/shelves/:childId')
@@ -40,7 +41,7 @@ warehouseRouter
 // Manages containers in a warehouse
 warehouseRouter
     .route('/:parentId/containers')
-    .post(addChildToParent(Warehouse, Container, 'containers'))
+    .post(addDataPropToRequestBody(Container), addChildToParent(Warehouse, Container, 'containers'))
 
 warehouseRouter
     .route('/:parentId/containers/:childId')
@@ -49,7 +50,7 @@ warehouseRouter
 // Manages items in a warehouse
 warehouseRouter
     .route('/:parentId/items')
-    .post(addChildToParent(Warehouse, Item, 'items'))
+    .post(addDataPropToRequestBody(Item), addChildToParent(Warehouse, Item, 'items'))
 
 warehouseRouter
     .route('/:parentId/items/:childId')

@@ -7,7 +7,8 @@ const {
     removeChildFromParent,
     update,
     get,
-    getAll
+    getAll,
+    addDataPropToRequestBody
 } = require('../utils/utilsController');
 
 const containerRouter = express.Router();
@@ -19,14 +20,14 @@ containerRouter
 
 containerRouter
     .route('/:id')
-    .get(get(Container, "id"))
-    .patch(update(Container, "id", "name"))
+    .get(get(Container))
+    .patch(addDataPropToRequestBody(Container), update(Container))
 
 
 // Manages items in a warehouse
 containerRouter
     .route('/:parentId/items')
-    .post(addChildToParent(Container, Item, 'items'))
+    .post(addDataPropToRequestBody(Item), addChildToParent(Container, Item, 'items'))
 
 containerRouter
     .route('/:parentId/items/:childId')

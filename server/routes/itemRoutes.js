@@ -4,7 +4,8 @@ const Item = require('../models/item');
 const { 
     update,
     get,
-    getAll
+    getAll,
+    addDataPropToRequestBody
 } = require('../utils/utilsController');
 
 const itemRouter = express.Router();
@@ -15,7 +16,7 @@ itemRouter
 
 itemRouter
     .route('/:id')
-    .get(get(Item, "id"))
-    .patch(update(Item, "id", "name", "description", "quantity"));
+    .get(get(Item))
+    .patch(addDataPropToRequestBody(Item), update(Item));
 
 module.exports = itemRouter

@@ -6,6 +6,7 @@ const {
     getAll,
     create,
     update,
+    addDataPropToRequestBody
 } = require('../utils/utilsController');
 
 const {
@@ -18,13 +19,13 @@ const userRouter = express.Router();
 userRouter
     .route('/')
     .get(getAll(User))
-    .post(create(User, "firstName", "lastName", "email", "password"));
+    .post(addDataPropToRequestBody(User), create(User));
 
 userRouter
     .route('/:id')
     .get(get(User, 'id'))
     .delete(deleteUser)
-    .patch(update(User, 'id', 'firstName', 'lastName', 'email', 'password'));
+    .patch(addDataPropToRequestBody(User), update(User));
 
 userRouter
     .route('/:id/warehouses')

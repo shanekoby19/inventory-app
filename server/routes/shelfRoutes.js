@@ -8,10 +8,11 @@ const {
     removeChildFromParent,
     get,
     getAll,
-    update
+    update,
+    addDataPropToRequestBody
 } = require('../utils/utilsController');
 
-const shelfRouter = express.Router({ mergeParams: true });
+const shelfRouter = express.Router();
 
 // Manage a single shelf
 shelfRouter
@@ -20,14 +21,14 @@ shelfRouter
 
 shelfRouter
     .route('/:id')
-    .get(get(Shelf, "id"))
-    .patch(update(Shelf, "id", "name"))
+    .get(get(Shelf))
+    .patch(addDataPropToRequestBody(Shelf), update(Shelf))
 
 
 // Manage containers in a shelf
 shelfRouter
     .route('/:parentId/containers') 
-    .post(addChildToParent(Shelf, Container, 'containers'));
+    .post(addDataPropToRequestBody(Container), addChildToParent(Shelf, Container, 'containers'));
 
 shelfRouter
     .route('/:parentId/containers/:childId') 
@@ -37,7 +38,7 @@ shelfRouter
 // Manages items on a shelf
 shelfRouter
     .route('/:parentId/items')
-    .post(addChildToParent(Shelf, Item, 'items'))
+    .post(addDataPropToRequestBody(Item), addChildToParent(Shelf, Item, 'items'))
 
 shelfRouter
     .route('/:parentId/items/:childId')
