@@ -3,21 +3,25 @@ const Shelf = require('../models/shelf');
 const Container = require('../models/container');
 const Item = require('../models/item');
 
-const {
-    updateShelf
-} = require('../controllers/shelfController');
-
 const { 
     addChildToParent,
-    removeChildFromParent 
+    removeChildFromParent,
+    get,
+    getAll,
+    update
 } = require('../utils/utilsController');
 
 const shelfRouter = express.Router({ mergeParams: true });
 
 // Manage a single shelf
 shelfRouter
+    .route('/')
+    .get(getAll(Shelf))
+
+shelfRouter
     .route('/:id')
-    .patch(updateShelf)
+    .get(get(Shelf, "id"))
+    .patch(update(Shelf, "id", "name"))
 
 
 // Manage containers in a shelf

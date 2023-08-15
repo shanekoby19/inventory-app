@@ -5,26 +5,28 @@ const Shelf = require('../models/shelf');
 const Container = require('../models/container');
 const Item = require('../models/item');
 
-const {
-    addWarehouse, 
-    deleteWarehouse,
-    getAllWarehouses
-} = require('../controllers/warehouseController.js');
-
 const { 
-    addChildToParent, removeChildFromParent 
+    addChildToParent, 
+    removeChildFromParent,
+    get,
+    getAll,
+    update,
+    create,
+    remove,
 } = require('../utils/utilsController.js');
 
 const warehouseRouter = express.Router();
 
 warehouseRouter
     .route('/')
-    .get(getAllWarehouses)
-    .post(addWarehouse);
+    .get(getAll(Warehouse))
+    .post(create(Warehouse, "name", "owners"));
 
 warehouseRouter
     .route('/:id')
-    .delete(deleteWarehouse);
+    .get(get(Warehouse, "id"))
+    .patch(update(Warehouse, "id", "name"))
+    .delete(remove(Warehouse, "id"));
 
 // Manages shelves in a warehouse
 warehouseRouter

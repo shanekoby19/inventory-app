@@ -1,10 +1,21 @@
 const express = require('express');
-const updateItem = require('../controllers/itemController');
+const Item = require('../models/item');
+
+const { 
+    update,
+    get,
+    getAll
+} = require('../utils/utilsController');
 
 const itemRouter = express.Router();
 
 itemRouter
-    .route('/:itemId')
-    .patch(updateItem);
+    .route('/')
+    .get(getAll(Item))
+
+itemRouter
+    .route('/:id')
+    .get(get(Item, "id"))
+    .patch(update(Item, "id", "name", "description", "quantity"));
 
 module.exports = itemRouter
