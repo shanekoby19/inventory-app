@@ -24,6 +24,7 @@
   "scripts": {
     "start": "react-scripts start",
     "dev": "nodemon server/server.js",
+    "remove-collections": "node server/helper/deleteCollections.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
