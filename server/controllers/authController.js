@@ -45,7 +45,7 @@ const login = catchAsync(async(req, res, next) => {
     });
 });
 
-const isAuthorized = (req, res, next) => {
+const isAuthenticated = (req, res, next) => {
     if(!req.signedCookies.isLoggedIn) {
         return next(new AppError('Please sign in to view this resource.'));
     }
@@ -63,5 +63,5 @@ const logout = (req, res, next) => {
 module.exports = {
     login,
     logout,
-    isAuthorized
+    isAuthenticated
 }

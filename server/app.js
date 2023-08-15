@@ -13,7 +13,7 @@ const itemRouter = require('./routes/itemRoutes');
 const authRouter = require('./routes/authRoutes');
 
 const appErrorHandler = require('./utils/appErrorHandler');
-const { isAuthorized } = require('./controllers/authController');
+const { isAuthenticated } = require('./controllers/authController');
 
 const app = express();
 
@@ -26,7 +26,7 @@ app.use(cookieParser(process.env.COOKIE_SECRET))
 // Routers
 app.use('/auth', authRouter);
 
-app.use(isAuthorized); // Authorize the user for all database resources
+app.use(isAuthenticated); // Authorize the user for all database resources
 app.use('/users', userRouter);
 app.use('/warehouses', warehouseRouter);
 app.use('/shelves', shelfRouter);
