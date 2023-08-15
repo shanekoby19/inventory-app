@@ -1,5 +1,9 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
+require('dotenv').config({
+    path: 'server/config/dbconfig.env'
+});
 
 const userRouter = require('./routes/userRoutes');
 const warehouseRouter = require('./routes/warehouseRoutes');
@@ -14,6 +18,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use(cookieParser(process.env.COOKIE_SECRET))
 
 
 // Routers
@@ -26,6 +31,5 @@ app.use('/auth', authRouter);
 
 // Error handling
 app.use(appErrorHandler);
-
 
 module.exports = app;

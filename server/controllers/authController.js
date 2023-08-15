@@ -26,11 +26,42 @@ const login = catchAsync(async(req, res, next) => {
         return next(new AppError('The password you gave does not match the password on file.'))
     }
 
+    // Set a login state cookie.
+    res.cookie('isLoggedIn', true, { 
+        maxAge: 1000 * 60 * 60 * 8, // Expires in 8 hours.
+        httpOnly: true, // Can only be access by the server.
+        signed: true // Signed with our secret for extra security.
+    });
+
+    // Set a userId cookie.
+    res.cookie('userId', user._id, { 
+        maxAge: 1000 * 60 * 60 * 8, // Expires in 8 hours.
+        httpOnly: true, // Can only be access by the server.
+        signed: true // Signed with our secret for extra security.
+    });
+
     res.status(200).json({
         user
-    })
+    });
 });
 
+const isAuthorized = (req, res, next) => {
+    if(!req.signedCookies.isLoggedIn) {
+        return next(new AppError('Please sign in to view this resource.'));
+    }
+    
+    next();
+}
+
+const logout = (req, res, next) => {
+    res.clearCookie('isLoggedIn');
+    res.clearCookie('userId');
+
+    res.sendStatus(200);
+}
+
 module.exports = {
-    login
+    login,
+    logout,
+    isAuthorized
 }

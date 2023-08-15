@@ -9,6 +9,10 @@ const {
 } = require('../utils/utilsController');
 
 const {
+    isAuthorized
+} = require('../controllers/authController');
+
+const {
     deleteUser,
     getAllWarehouses
 } = require('../controllers/userController');
@@ -17,7 +21,7 @@ const userRouter = express.Router();
 
 userRouter
     .route('/')
-    .get(getAll(User))
+    .get(isAuthorized, getAll(User))
     .post(create(User, "firstName", "lastName", "email", "password"));
 
 userRouter
