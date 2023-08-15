@@ -25,9 +25,9 @@ app.use(cookieParser(process.env.COOKIE_SECRET))
 
 // Routers
 app.use('/auth', authRouter);
+app.use('/users', userRouter);
 
 app.use(isAuthenticated); // Authorize the user for all database resources
-app.use('/users', userRouter);
 app.use('/warehouses', warehouseRouter);
 app.use('/shelves', shelfRouter);
 app.use('/containers', containerRouter);
