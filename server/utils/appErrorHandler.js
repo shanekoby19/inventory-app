@@ -6,11 +6,30 @@ const appErrorHandler = (err, req, res, next) => {
         return res.status(400).json({
             message: err.message
         })
-    } else if(err instanceof mongoose.Error.ValidationError) {
+    } 
+    // Mongoose validator error.
+    else if(err instanceof mongoose.Error.ValidationError) {
         return res.status(400).json({
             message: err.message
         })
-    } else if(err.isAppError) {
+    } 
+    // App Errors (Custom)
+    else if(err.isAppError) {
+        return res.status(400).json({
+            message: err.message
+        })
+    } 
+    // JWT Token Expired
+    else if(err.name === 'TokenExpiredError') {
+        return res.status(400).json({
+            message: `You're login token is no longer valid, please login again to view this resource.`
+        })
+    }
+    // Other JWT errors
+    else if(err.name === 'JsonWebTokenError') {
+        // Set a custom message if the user has logged out.
+        if(err.message === 'jwt must be provided') err.message = 'Please login again to view this resource'
+
         return res.status(400).json({
             message: err.message
         })
