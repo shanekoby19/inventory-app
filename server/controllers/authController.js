@@ -35,13 +35,14 @@ const login = catchAsync(async(req, res, next) => {
     // Create a jwt which will include a login status and the userId.
     const token = await jwt.sign({
         isLoggedIn: true,
-        userId: user._id,
+        user: user
     }, process.env.JWT_SECRET, { expiresIn: '8hr' });
 
     // Store the token in a cookie on the users browser.
     res.cookie('jwt', token, {
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 8, // 8 hours
+        SameSite: 'Lax',
         signed: true
     });
 
@@ -61,9 +62,34 @@ const isAuthenticated = catchAsync(async (req, res, next) => {
     if(!decoded.isLoggedIn) {
         return next(new AppError('You must login to view this resource.', 401));
     }
+
+    // Attach the user in the request body.
+    req.user = decoded.user;
     
     next();
 });
+
+/**
+ * 
+ * @param {*} role - Checks to see if a user has the minimum required role.
+ * @returns A middleware function that will check the users role to ensure they have the access needed to perform some action.
+ */
+const isAuthorized = (minimumRequiredRole) => {
+
+    const roleHierarchy = {
+        admin: 1,
+        user: 0,
+    }
+
+    // TODO!
+    return (req, res, next) => {
+        if(roleHierarchy[req.user.role] < roleHierarchy[minimumRequiredRole]) {
+            return next(new AppError(`Sorry, you do not have the required authorization to perform this action.`))
+        }
+
+        next();
+    }
+}
 
 const logout = (req, res, next) => {
     res.clearCookie('jwt');
@@ -73,5 +99,6 @@ const logout = (req, res, next) => {
 module.exports = {
     login,
     logout,
-    isAuthenticated
+    isAuthenticated,
+    isAuthorized
 }

@@ -10,7 +10,7 @@ const {
 } = require('../utils/utilsController');
 
 const {
-    isAuthenticated
+    isAuthenticated, isAuthorized
 } = require('../controllers/authController');
 
 const {
@@ -22,14 +22,14 @@ const userRouter = express.Router();
 
 userRouter
     .route('/')
-    .get(isAuthenticated, getAll(User))
-    .post(addDataPropToRequestBody(User), create(User));
+    .get(isAuthenticated, isAuthorized('admin'), getAll(User))
+    .post(addDataPropToRequestBody(User), isAuthorized('admin'), create(User));
 
 userRouter
     .route('/:id')
-    .get(isAuthenticated, get(User, 'id'))
-    .delete(isAuthenticated, deleteUser)
-    .patch(isAuthenticated, addDataPropToRequestBody(User), update(User));
+    .get(isAuthenticated, isAuthorized('admin'), get(User))
+    .delete(isAuthenticated, isAuthorized('admin'), deleteUser)
+    .patch(isAuthenticated, isAuthorized('admin'), addDataPropToRequestBody(User), update(User));
 
 userRouter
     .route('/:id/warehouses')

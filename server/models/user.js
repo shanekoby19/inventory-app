@@ -31,6 +31,11 @@ const userSchema = new mongoose.Schema({
             },
             message: 'Invalid password, your password must be at least 8 characters and contain 1 lowercase letter, 1 uppercase letter, 1 number, and 1 special symbol.'
         }
+    },
+    role: {
+        type: String,
+        enum: ['admin', 'user'],
+        default: 'user',
     }
 });
 
