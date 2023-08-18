@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const appErrorHandler = (err, req, res, next) => {
+const handleAppErrors = (err, req, res, next) => {
     // Duplicate Key Error
     if(err.code === 11000) {
         return res.status(400).json({
@@ -36,4 +36,4 @@ const appErrorHandler = (err, req, res, next) => {
     }
 }
 
-module.exports = appErrorHandler;
+module.exports = handleAppErrors;
