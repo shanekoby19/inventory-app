@@ -1,13 +1,11 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
-
 const jwt = require('jsonwebtoken');
 require('dotenv').config({
     path: 'server/config/dbconfig.env'
 });
 
 const AppError = require('../utils/AppError');
-
 const catchAsync = require('../utils/catchAsync');
 
 const login = catchAsync(async(req, res, next) => {
@@ -51,6 +49,12 @@ const login = catchAsync(async(req, res, next) => {
     });
 });
 
+
+const logout = (req, res, next) => {
+    res.clearCookie('jwt');
+    res.sendStatus(200);
+}
+
 const isAuthenticated = catchAsync(async (req, res, next) => {
     // Get the token from the signed cookie in the request object.
     const token = req.signedCookies.jwt;
@@ -89,11 +93,6 @@ const isAuthorized = (minimumRequiredRole) => {
 
         next();
     }
-}
-
-const logout = (req, res, next) => {
-    res.clearCookie('jwt');
-    res.sendStatus(200);
 }
 
 module.exports = {

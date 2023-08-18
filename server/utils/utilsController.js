@@ -11,7 +11,7 @@ const get = (Model, idParam="id") => {
     return catchAsync(async(req, res, next) => {
         // Extract the id.
         const id = req.params[idParam];
-    
+        
         // Find the item given the id.
         const thing = await Model.findById(id);
     
