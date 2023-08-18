@@ -23,7 +23,7 @@ const userRouter = express.Router();
 userRouter
     .route('/')
     .get(isAuthenticated, isAuthorized('admin'), getAll(User))
-    .post(addDataPropToRequestBody(User), isAuthorized('admin'), create(User));
+    .post(addDataPropToRequestBody(User), create(User));
 
 userRouter
     .route('/:id')
