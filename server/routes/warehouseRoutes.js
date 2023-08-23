@@ -16,6 +16,10 @@ const {
     addDataPropToRequestBody
 } = require('../utils/utilsController.js');
 
+const {
+    isEditor
+} = require('../controllers/authController');
+
 const warehouseRouter = express.Router();
 
 warehouseRouter
@@ -26,8 +30,13 @@ warehouseRouter
 warehouseRouter
     .route('/:id')
     .get(get(Warehouse))
-    .patch(addDataPropToRequestBody(Warehouse), update(Warehouse))
-    .delete(remove(Warehouse));
+    .patch(addDataPropToRequestBody(Warehouse), isEditor(Warehouse), update(Warehouse))
+    .delete(isEditor(Warehouse), remove(Warehouse));
+
+
+// Sets up editor protection for all objects inside the warehouse (shelves, containers, items)
+warehouseRouter
+    .use('/:parentId/*', isEditor(Warehouse, "parentId"));
 
 // Manages shelves in a warehouse
 warehouseRouter
