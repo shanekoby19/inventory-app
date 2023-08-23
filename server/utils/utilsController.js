@@ -1,5 +1,6 @@
 const catchAsync = require('./catchAsync');
 const AppError = require('./AppError');
+const Warehouse = require('../models/warehouse');
 
 /**
  * A function that gets an item from a collection the database given the item id.
@@ -14,6 +15,15 @@ const get = (Model, idParam="id") => {
         
         // Find the item given the id.
         const thing = await Model.findById(id);
+
+        // Find all objects where the logged in user is a viewer, editor or owner.
+        const viewerOrGreater = thing.viewers.find(_id => _id.toString() === req.user._id) ||
+            thing.editors.find(_id => _id.toString() === req.user._id) ||
+            thing.owner.toString() === req.user._id;
+
+        if(!viewerOrGreater) {
+            return next(new AppError('You do not have access to view this resource.', 401));
+        }
     
         // Return the item you found.
         res.status(200).json({
@@ -30,10 +40,17 @@ const get = (Model, idParam="id") => {
 const getAll = (Model) => {
     return catchAsync(async(req, res, next) => {
         // Find all instances in the model.
-        const things = await Model.find();
-    
+        const things = await Warehouse.find();
+
+        // Find all objects where the logged in user is a viewer, editor or owner.
+        const viewerOf = things.filter(thing => {
+            return thing.viewers.find(_id => _id.toString() === req.user._id) ||
+            thing.editors.find(_id => _id.toString() === req.user._id) ||
+            thing.owner.toString() === req.user._id
+        });
+
         res.status(200).json({
-            [`${Model.modelName.toLowerCase()}s`]: things
+            [`${Model.modelName.toLowerCase()}s`]: viewerOf
         })
     })
 }
@@ -46,7 +63,10 @@ const getAll = (Model) => {
 const create = (Model) => {
     return catchAsync(async(req, res, next) => {
         // req.data will contain any valid data passed in that matches the model.
-        const thing = await Model.create(req.data);
+        const thing = await Model.create({
+            ...req.data,
+            owner: [req.user._id], // Always add the logged in user as the owner.
+        });
 
         res.status(201).json({
             [Model.modelName.toLowerCase()]: thing
@@ -68,7 +88,7 @@ const update = (Model, paramId="id") => {
         const thing = await Model.findByIdAndUpdate(id, req.data, {
             new: true,
             runValidators: true,
-        })
+        });
 
         res.status(200).json({
             [Model.modelName.toLowerCase()]: thing
