@@ -1,6 +1,5 @@
 const catchAsync = require('./catchAsync');
 const AppError = require('./AppError');
-const Warehouse = require('../models/warehouse');
 
 /**
  * A function that gets an item from a collection the database given the item id.
@@ -40,13 +39,13 @@ const get = (Model, idParam="id") => {
 const getAll = (Model) => {
     return catchAsync(async(req, res, next) => {
         // Find all instances in the model.
-        const things = await Warehouse.find();
+        const things = await Model.find();
 
         // Find all objects where the logged in user is a viewer, editor or owner.
         const viewerOf = things.filter(thing => {
-            return thing.viewers.find(_id => _id.toString() === req.user._id) ||
-            thing.editors.find(_id => _id.toString() === req.user._id) ||
-            thing.owner.toString() === req.user._id
+            return thing?.viewers?.find(_id => _id.toString() === req.user._id) ||
+            thing?.editors?.find(_id => _id.toString() === req.user._id) ||
+            thing?.owner?.toString() === req.user._id
         });
 
         res.status(200).json({
