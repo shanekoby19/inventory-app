@@ -38,6 +38,7 @@ const get = (Model, idParam="id") => {
  */
 const getAll = (Model) => {
     return catchAsync(async(req, res, next) => {
+        console.log('Running get all');
         // Find all instances in the model.
         const things = await Model.find();
 

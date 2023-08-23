@@ -15,8 +15,8 @@ mongoose.connect(connectionString, {
 .then(() => {
     console.log("Successfully connected to your MongoDB server.");
 
-    const server = app.listen(3000, () => {
-        console.log("Server is running on port 3000.")
+    const server = app.listen(8000, () => {
+        console.log("Server is running on port 8000.")
     });
 
     process.on('uncaughtException', () => {
