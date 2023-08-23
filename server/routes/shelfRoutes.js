@@ -12,6 +12,10 @@ const {
     addDataPropToRequestBody
 } = require('../utils/utilsController');
 
+const {
+    isEditor,
+} = require('../controllers/authController');
+
 const shelfRouter = express.Router();
 
 // Manage a single shelf
@@ -22,8 +26,11 @@ shelfRouter
 shelfRouter
     .route('/:id')
     .get(get(Shelf))
-    .patch(addDataPropToRequestBody(Shelf), update(Shelf))
+    .patch(addDataPropToRequestBody(Shelf), isEditor(Shelf), update(Shelf))
 
+// Sets up editor protection for all objects inside the shelf (containers, items)
+shelfRouter
+    .use('/:parentId/*', isEditor(Shelf, "parentId"));
 
 // Manage containers in a shelf
 shelfRouter

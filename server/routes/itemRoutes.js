@@ -10,6 +10,10 @@ const {
 
 const itemRouter = express.Router();
 
+const {
+    isEditor
+} = require('../controllers/authController');
+
 itemRouter
     .route('/')
     .get(getAll(Item))
@@ -17,6 +21,6 @@ itemRouter
 itemRouter
     .route('/:id')
     .get(get(Item))
-    .patch(addDataPropToRequestBody(Item), update(Item));
+    .patch(addDataPropToRequestBody(Item), isEditor(Item), update(Item));
 
 module.exports = itemRouter

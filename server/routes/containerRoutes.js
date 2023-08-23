@@ -11,6 +11,10 @@ const {
     addDataPropToRequestBody
 } = require('../utils/utilsController');
 
+const {
+    isEditor
+} = require('../controllers/authController');
+
 const containerRouter = express.Router();
 
 // Manage Individual containers
@@ -21,8 +25,12 @@ containerRouter
 containerRouter
     .route('/:id')
     .get(get(Container))
-    .patch(addDataPropToRequestBody(Container), update(Container))
+    .patch(addDataPropToRequestBody(Container), isEditor(Container), update(Container))
 
+
+// Sets up editor protection for all items in a container.
+containerRouter
+    .use('/:parentId/*', isEditor(Container, "parentId"));
 
 // Manages items in a warehouse
 containerRouter

@@ -11,12 +11,10 @@ const {
 
 const {
     isAuthenticated,
-    isEditor
 } = require('../controllers/authController');
 
 const {
-    deleteUser,
-    getAllWarehouses
+    deleteUser
 } = require('../controllers/userController');
 
 const userRouter = express.Router();
@@ -29,11 +27,7 @@ userRouter
 userRouter
     .route('/:id')
     .get(isAuthenticated, get(User))
-    .delete(isAuthenticated, isEditor(User), deleteUser)
-    .patch(isAuthenticated, isEditor(User), addDataPropToRequestBody(User), update(User));
-
-userRouter
-    .route('/:id/warehouses')
-    .get(isAuthenticated, getAllWarehouses);
+    .delete(isAuthenticated, deleteUser)
+    .patch(isAuthenticated, addDataPropToRequestBody(User), update(User));
 
 module.exports = userRouter;
