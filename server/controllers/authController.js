@@ -91,8 +91,6 @@ const isEditor = (Model, paramId="id") => {
         // Try to find the object in the database collection.
         const thing = await Model.findById(id);
 
-        console.log(thing);
-
         // Check to see if the logged in user is an editor or owner of the object.
         const isEditor = 
         thing?.editors.find((_id) => _id.toString() === req.user._id) || 
