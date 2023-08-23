@@ -15,22 +15,8 @@ const deleteUser = catchAsync(async(req, res, next) => {
     await User.findByIdAndDelete(userId);
 
     res.sendStatus(204);
-})
-
-const getAllWarehouses = catchAsync(async(req, res, next) => {
-    const userId = req.params.id;
-
-    // Find all warehouses with the given userId.
-    const warehouses = await Warehouse.find({ 
-        owners: { _id: userId }
-    });
-
-    res.status(200).json({
-        warehouses
-    })
 });
 
 module.exports = {
-    deleteUser,
-    getAllWarehouses
+    deleteUser
 }
