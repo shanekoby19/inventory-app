@@ -64,7 +64,7 @@ const create = (Model) => {
         // req.data will contain any valid data passed in that matches the model.
         const thing = await Model.create({
             ...req.data,
-            owner: [req.user._id], // Always add the logged in user as the owner.
+            owner: req.user._id, // Always add the logged in user as the owner.
         });
 
         res.status(201).json({
@@ -117,7 +117,10 @@ const addChildToParent = (ParentModel, ChildModel, parentRelationArray) => {
         const parentId = req.params.parentId;
         
         // Create the child object WITHOUT saving
-        const child = new ChildModel(req.data);
+        const child = new ChildModel({
+            ...req.data,
+            owner: req.user._id // Add the requesting user as an owner to the child object.
+        });
 
         // Add the child to the parent.
         const parent = await ParentModel.findByIdAndUpdate(parentId, {
