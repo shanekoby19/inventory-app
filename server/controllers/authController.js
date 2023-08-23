@@ -34,12 +34,12 @@ const login = catchAsync(async(req, res, next) => {
     const token = await jwt.sign({
         isLoggedIn: true,
         user: user
-    }, process.env.JWT_SECRET, { expiresIn: '8hr' });
+    }, process.env.JWT_SECRET, { expiresIn: '2hr' });
 
     // Store the token in a cookie on the users browser.
     res.cookie('jwt', token, {
         httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 8, // 8 hours
+        maxAge: 1000 * 60 * 60 * 2, // 2 hours in milliseconds.
         SameSite: 'Lax',
         signed: true
     });
@@ -51,7 +51,11 @@ const login = catchAsync(async(req, res, next) => {
 
 
 const logout = (req, res, next) => {
+    // TODO - Further cookie clean-up
     res.clearCookie('jwt');
+
+    //TODO - Expire token
+
     res.sendStatus(200);
 }
 
@@ -74,30 +78,38 @@ const isAuthenticated = catchAsync(async (req, res, next) => {
 });
 
 /**
- * 
- * @param {*} role - Checks to see if a user has the minimum required role.
- * @returns A middleware function that will check the users role to ensure they have the access needed to perform some action.
+ * Checks to see if the currently logged in user is an editor of a resource.
+ * @param {*} Model - The model you want to check to see if the user is an editor of.
+ * @returns A middleware function that will check to see if logged in user is an editor of the object.
  */
-const isAuthorized = (minimumRequiredRole) => {
+const isEditor = (Model, paramId="id") => {
 
-    const roleHierarchy = {
-        admin: 1,
-        user: 0,
-    }
+    return catchAsync(async(req, res, next) => {
+        // Get the id off the incoming request.
+        const id = req.params[paramId];
 
-    // TODO!
-    return (req, res, next) => {
-        if(roleHierarchy[req.user.role] < roleHierarchy[minimumRequiredRole]) {
-            return next(new AppError(`Sorry, you do not have the required authorization to perform this action.`))
+        // Try to find the object in the database collection.
+        const thing = await Model.findById(id);
+
+        console.log(thing);
+
+        // Check to see if the logged in user is an editor or owner of the object.
+        const isEditor = 
+        thing?.editors.find((_id) => _id.toString() === req.user._id) || 
+        thing.owner.toString() === req.user._id;
+
+        // Return an error if the user is not an editor of the object.
+        if(!isEditor) {
+            return next(new AppError('You must be an editor of this object to perform this action', 401))
         }
 
         next();
-    }
+    });
 }
 
 module.exports = {
     login,
     logout,
     isAuthenticated,
-    isAuthorized
+    isEditor
 }
