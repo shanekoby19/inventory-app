@@ -4,7 +4,7 @@ const List = ({ list }) => {
     return (
         <ul>
             {
-                list.map((item) => <Item key={item._id} data={item} />)
+                list.length > 0 && list.map((item) => <Item key={item._id} data={item} />)
             }
         </ul>
     )

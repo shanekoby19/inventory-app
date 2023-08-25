@@ -15,28 +15,26 @@ const Login = () => {
     const handlePasswordChange = (e) => setPassword(e.target.value);
 
     const login = async() => {
-        try {
-            // Sending a GET request using the fetch API
-            const response = await fetch('http://localhost:8000/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }),
-            });
-            // Convert the response to json.
-            const data = await response.json();
-            
-            // If an error exists set the error message.
-            if(data.message) {
-                return setError(data.message);
-            }
+        // Sending a GET request using the fetch API
+        const response = await fetch('http://localhost:8000/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({ email, password }),
+        });
 
-            // If no error exists login the user.
-            navigate('/warehouses')
-        } catch(err) {
-            console.log(err);
+        // Convert the response to json.
+        const data = await response.json();
+        
+        // If an error exists set the error message.
+        if(data.message) {
+            return setError(data.message);
         }
+
+        // If no error exists login the user.
+        navigate('/warehouses');
     }
 
     return(

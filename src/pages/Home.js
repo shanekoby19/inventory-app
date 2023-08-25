@@ -7,7 +7,6 @@ import '../styles/pages/Home.scss';
 const Home = () => {
     const warehouses = useLoaderData();
 
-    console.log(warehouses);
     return(
         <section className='home'>
             <h1 className='primary__heading'>Warehouses</h1>
