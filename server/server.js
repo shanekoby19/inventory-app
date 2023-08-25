@@ -6,6 +6,7 @@ require('dotenv').config({
 
 const { DB_USERNAME, DB_PASSWORD } = process.env;
 const connectionString = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@cluster0.ta4kr3w.mongodb.net/?retryWrites=true&w=majority`;
+const port = 8000;
 
 // REPLACE WITH REAL SERVER CONNECTION
 mongoose.connect(connectionString, {
@@ -15,8 +16,8 @@ mongoose.connect(connectionString, {
 .then(() => {
     console.log("Successfully connected to your MongoDB server.");
 
-    const server = app.listen(8000, () => {
-        console.log("Server is running on port 8000.")
+    const server = app.listen(port, () => {
+        console.log(`Server is running on port ${port}.`)
     });
 
     process.on('uncaughtException', () => {
