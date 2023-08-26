@@ -1,18 +1,17 @@
-import { useNavigate, useLocation } from 'react-router';
+import { useNavigate } from 'react-router';
 
 import PrimaryButton from './PrimaryButton';
 
 import '../styles/components/Item.scss';
 
-const Item = ({ data }) => {
-    const { name, description, quantity } = data;
+const Item = ({ data, btnName, customPath }) => {
+    const { _id, name, description, quantity } = data;
     const navigate = useNavigate();
-    const { pathname } = useLocation();
 
     return (
         <div className='item'>
             <h2 className="item__name secondary__heading">{name}</h2>
-            <PrimaryButton text="Go To Warehouse" handleClick={() => navigate(`${pathname}/${data._id}`)} />
+            <PrimaryButton text={`Go To ${btnName}`} handleClick={() => navigate(`${customPath}/${_id}`)} />
         </div>
     )
 }
