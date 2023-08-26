@@ -7,7 +7,7 @@ const Navigation = () => {
         <nav className='nav'>
             <div className='nav__items'>
                 <NavLink
-                    to="/" 
+                    to="/warehouses" 
                     className='nav__item'
                 >Manage</NavLink>
                 <NavLink

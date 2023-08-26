@@ -30,7 +30,7 @@ const shelfSchema = new mongoose.Schema({
 
 shelfSchema.pre(/^find/, function(next) {
     this
-        .populate('containters')
+        .populate('containers')
         .populate('items');
 
     next();
