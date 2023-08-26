@@ -10,7 +10,7 @@ const Home = () => {
     return(
         <section className='home'>
             <h1 className='primary__heading'>Warehouses</h1>
-            <List list={warehouses}/>
+            <List list={warehouses} btnName="Warehouse" customPath={'/warehouses'}/>
         </section>
     )
 }
