@@ -32,6 +32,13 @@ const warehouseSchema = new mongoose.Schema({
     }]
 });
 
+warehouseSchema.pre(/^find/, function() {
+    this
+        .populate('containers')
+        .populate('shelves')
+        .populate('items')
+})
+
 const Warehouse = mongoose.model('Warehouse', warehouseSchema);
 
 module.exports = Warehouse;
