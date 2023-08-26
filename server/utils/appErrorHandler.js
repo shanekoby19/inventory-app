@@ -33,6 +33,12 @@ const handleAppErrors = (err, req, res, next) => {
         return res.status(400).json({
             message: err.message
         })
+    } 
+    // Catch all ohther errors.
+    else {
+        return res.status(400).json({
+            message: err?.message
+        })
     }
 }
 
