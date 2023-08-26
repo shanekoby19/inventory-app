@@ -4,6 +4,8 @@ import Home from "../pages/Home";
 import Login from '../pages/Login'
 import Warehouse from '../pages/Warehouse';
 import Shelf from '../pages/Shelf';
+import Container from "../pages/Container";
+import Item from "../pages/Item";
 
 const router = createBrowserRouter([
     {
@@ -59,6 +61,44 @@ const router = createBrowserRouter([
                     throw new Error(message);
                 }
                 return shelf;
+            }
+        }]
+    },
+    {
+        path: '/containers/:id',
+        element: <Layout />,
+        children: [{
+            index: true,
+            element: <Container />,
+            loader: async({ params }) => {
+                const response = await fetch(`http://localhost:8000/containers/${params.id}`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                const { container, message } = await response.json();
+                if(message) {
+                    throw new Error(message);
+                }
+                return container;
+            }
+        }]
+    },
+    {
+        path: '/items/:id',
+        element: <Layout />,
+        children: [{
+            index: true,
+            element: <Item />,
+            loader: async({ params }) => {
+                const response = await fetch(`http://localhost:8000/items/${params.id}`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                const { item, message } = await response.json();
+                if(message) {
+                    throw new Error(message);
+                }
+                return item;
             }
         }]
     }

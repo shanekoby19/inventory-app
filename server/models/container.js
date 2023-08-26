@@ -24,6 +24,12 @@ const containerSchema = new mongoose.Schema({
     }]
 });
 
+containerSchema.pre(/^find/, function(next) {
+    this.populate('items')
+
+    next();
+})
+
 const Container = mongoose.model('Container', containerSchema);
 
 module.exports = Container;
