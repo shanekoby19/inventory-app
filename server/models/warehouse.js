@@ -32,11 +32,17 @@ const warehouseSchema = new mongoose.Schema({
     }]
 });
 
-warehouseSchema.pre(/^find/, function() {
-    this
-        .populate('containers')
-        .populate('shelves')
-        .populate('items')
+warehouseSchema.pre(/^find/, function(next) {
+    try {
+        this
+            .populate('containers')
+            .populate('shelves')
+            .populate('items');
+    } catch(err) {
+        return next(err);
+    }
+
+    next();
 })
 
 const Warehouse = mongoose.model('Warehouse', warehouseSchema);

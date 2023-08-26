@@ -28,6 +28,14 @@ const shelfSchema = new mongoose.Schema({
     }]
 });
 
+shelfSchema.pre(/^find/, function(next) {
+    this
+        .populate('containters')
+        .populate('items');
+
+    next();
+})
+
 const Shelf = mongoose.model('Shelf', shelfSchema);
 
 module.exports = Shelf;
