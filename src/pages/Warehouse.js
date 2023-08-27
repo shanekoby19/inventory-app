@@ -1,4 +1,5 @@
-import { useLoaderData } from "react-router"
+import { useLoaderData } from "react-router";
+
 import List from '../components/List'
 
 
@@ -7,14 +8,11 @@ const Warehouse = () => {
 
     return (
         <div>
-            <h1 className='primary__heading'>Shelves</h1>
-            <List list={shelves} btnName="Shelf" customPath={`../../shelves`} />
+            <List list={shelves} resource='Shelves' />
 
-            <h1 className='primary__heading'>Containers</h1>
-            <List list={containers} btnName="Container" customPath={`../../containers`}  />
+            <List list={containers} resource='Containers' />
 
-            <h1 className='primary__heading'>Items</h1>
-            <List list={items} btnName="Item" customPath={`../../items`} />
+            <List list={items} resource='Items' />
         </div>
     )
 }

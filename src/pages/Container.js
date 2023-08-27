@@ -8,7 +8,7 @@ const Container = () => {
     return (
         <div>
             <h1 className='primary__heading'>Items</h1>
-            <List list={items} btnName="Item" customPath={`../../items`} />
+            <List list={items} resource='Items' />
         </div>
     )
 }
