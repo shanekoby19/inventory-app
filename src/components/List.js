@@ -1,19 +1,21 @@
 import Item from './Item';
 
-const List = ({ list, btnName, customPath }) => {
+const List = ({ list, resource }) => {
     return (
-        <ul>
-            {
-                list.length > 0 && list.map((item) => (
-                    <Item 
-                        key={item._id} 
-                        data={item} 
-                        btnName={btnName}
-                        customPath={customPath} 
-                    />
-                ))
-            }
-        </ul>
+        <div>
+            <h2 className='secondary__heading'>{resource}</h2>
+            <ul>
+                {
+                    list.length > 0 && list.map((item) => (
+                        <Item 
+                            key={item._id} 
+                            data={item} 
+                            resource={resource} 
+                        />
+                    ))
+                }
+            </ul>
+        </div>
     )
 }
 
