@@ -7,7 +7,7 @@ async function deleteAllCollections() {
     const collections = await mongoose.connection.db.collections();
   
     for (let collection of collections) {
-      await collection.deleteMany();
+      if(collection.collectionName !== 'users') await collection.deleteMany();
     }
   
     console.log('All collections removed.');
