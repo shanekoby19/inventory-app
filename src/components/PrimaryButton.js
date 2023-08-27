@@ -3,7 +3,10 @@
 import '../styles/components/PrimaryButton.scss';
 
 const PrimaryButton = ({ 
-    text="button", 
+    text="button",
+    name,
+    value,
+    type,
     handleClick=() => undefined,
     customStyles={}
 }) => {
@@ -12,6 +15,9 @@ const PrimaryButton = ({
             className='primary__button' 
             onClick={handleClick}
             style={customStyles}
+            name={name}
+            value={value}
+            type={type}
         >{text}</button>
     )
 }
