@@ -4,7 +4,8 @@ import { createBrowserRouter } from "react-router-dom";
 import { 
     getAll,
     getById,
-    idActions
+    childIdActions,
+    childParentIdActions
 } from "./utilRouter";
 
 // Pages
@@ -31,17 +32,25 @@ const router = createBrowserRouter([
             element: <Home />,
             loader: getAll('warehouses'),
         }, {
-            path: '/warehouses/:id',
+            path: ':id',
+            exact: true,
             element: <Warehouse />,
             loader: getById('warehouses'),
-            action: idActions('warehouses'),
+            action: childIdActions('warehouses'),
+        }, {
+            ///////////////////////////// WAREHOUSE SHELVES /////////////////////////
+            path: ':parentId/shelves/:childId',
+            exact: true,
+            element: <Shelf />,
+            loader: getById('shelves', "shelfId"),
+            action: childParentIdActions(),
         }]
     },
     {
         ////////////////////////////////// SHELVES ///////////////////////////////
         path: '/shelves/:id',
         element: <Layout />,
-        action: idActions('shelves'),
+        action: childIdActions('shelves'),
         children: [{
             index: true,
             element: <Shelf />,
@@ -52,7 +61,7 @@ const router = createBrowserRouter([
         ////////////////////////////////// CONTAINERS ///////////////////////////////
         path: '/containers/:id',
         element: <Layout />,
-        action: idActions('containers'),
+        action: childIdActions('containers'),
         children: [{
             index: true,
             element: <Container />,
@@ -63,7 +72,7 @@ const router = createBrowserRouter([
         ////////////////////////////////// ITEMS ///////////////////////////////
         path: '/items/:id',
         element: <Layout />,
-        action: idActions('items'),
+        action: childIdActions('items'),
         children: [{
             index: true,
             element: <Item />,

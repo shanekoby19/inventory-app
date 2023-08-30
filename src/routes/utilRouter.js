@@ -26,12 +26,12 @@ export const getAll = (resource) => {
  * @param {string} resource - The pluar database resource. (i.e warehouses)
  * @returns A loader function for react-router-dom
  */
-export const getById = (resource) => {
+export const getById = (resource, idName='id') => {
     // Get the singler resource name for retreiving the object from the database.
     const resourceSingular = resource.slice(-3) === 'ves' ? `${resource.slice(0, -3)}f` : resource.slice(0, -1);
 
     return async({ params }) => {
-        const response = await fetch(`http://localhost:8000/${resource}/${params.id}`, {
+        const response = await fetch(`http://localhost:8000/${resource}/${params[idName]}`, {
             method: 'GET',
             credentials: 'include'
         });
@@ -48,16 +48,13 @@ export const getById = (resource) => {
  * @param {string} resource The pluar database resource. (i.e warehouses)
  * @returns A loader function for react-router-dom
  */
-export const idActions = (resource) => {
+export const childIdActions = (resource) => {
     const singularResource = resource.slice(-3) === 'ves' ? `${resource.slice(0, -3)}f` : resource.slice(0, -1)
 
     return async({ params, request }) => {
         const id = params.id;
         const data = await request.formData();
         const intent = data.get('intent');
-
-        console.log(singularResource);
-        console.log(id);
     
         // Add all the properties needed to submit a record to the database.
         const submission = {
@@ -79,15 +76,47 @@ export const idActions = (resource) => {
             if(data.message) {
                 return data.message;
             }
-
-            console.log(data);
-            console.log(singularResource);
-            console.log(data[singularResource])
     
             return data[singularResource];
             
         } else if(intent === 'delete') {
+            console.log(resource, id);
             const response = await fetch(`http://localhost:8000/${resource}/${id}`, {
+                method: 'DELETE',
+                credentials: 'include',
+            });
+            const { message } = await response.json();
+            
+            if(message) {
+                return message;
+            }
+    
+            return 'Item deleted successfully.';
+        }
+    
+        return submission
+    }
+}
+
+/**
+ * A function that returns an action function update, and delete items in the database.
+ * @param {string} resource The pluar database resource. (i.e warehouses)
+ * @returns A loader function for react-router-dom
+ */
+export const childParentIdActions = () => {
+    return async({ request }) => {
+        const path = request.url.split('/').slice(3).join('/');
+        const data = await request.formData();
+        const intent = data.get('intent');
+    
+        // Add all the properties needed to submit a record to the database.
+        const submission = {
+            name: data.get('name'),
+            quantity: data.get('quantity')
+        }
+    
+        if(intent === 'delete') {
+            const response = await fetch(`http://localhost:8000/${path}`, {
                 method: 'DELETE',
                 credentials: 'include',
             });
