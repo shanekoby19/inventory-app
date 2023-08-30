@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import { useFetcher } from 'react-router-dom';
 
 import PrimaryButton from './PrimaryButton';
@@ -10,12 +10,15 @@ const Item = ({ data, resource }) => {
     const { _id, name } = data;
     const btnName = resource.slice(-3) === 'ves' ? `${resource.slice(0, -3)}f` : resource.slice(0, -1)
     const navigate = useNavigate();
+    const location = useLocation();
+
     const fetcher = useFetcher();
 
     const [itemName, setItemName] = useState(name);
+    const [action, setAction] = useState('');
 
     return (
-        <fetcher.Form className='item' method="post" action={`/${resource.toLowerCase()}/${_id}`}>
+        <fetcher.Form className='item' method="post" action={action}>
             <div className='item__input'>
                 <input 
                     className="item__name"
@@ -32,6 +35,7 @@ const Item = ({ data, resource }) => {
                 />
                 <PrimaryButton 
                     text={`Delete ${btnName}`} 
+                    handleClick={() => setAction(`${location.pathname}/${resource.toLowerCase()}/${_id}`)}
                     type="submit"
                     name="intent"
                     value="delete"
@@ -40,6 +44,7 @@ const Item = ({ data, resource }) => {
                     itemName !== name && 
                     <PrimaryButton
                         text={`Update ${btnName}`}
+                        handleClick={() => setAction(`/${resource.toLowerCase()}/${_id}`)}
                         type="submit"
                         name="intent"
                         value="update"

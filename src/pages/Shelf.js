@@ -3,6 +3,7 @@ import { useLoaderData } from 'react-router';
 import List from '../components/List';
 
 const Shelf = () => {
+    console.log(useLoaderData());
     const { containers, items } = useLoaderData();
 
     return (
