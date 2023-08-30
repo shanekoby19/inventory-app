@@ -16,9 +16,9 @@ const get = (Model, idParam="id") => {
         const thing = await Model.findById(id);
 
         // Find all objects where the logged in user is a viewer, editor or owner.
-        const viewerOrGreater = thing.viewers.find(_id => _id.toString() === req.user._id) ||
-            thing.editors.find(_id => _id.toString() === req.user._id) ||
-            thing.owner.toString() === req.user._id;
+        const viewerOrGreater = thing?.viewers.find(_id => _id.toString() === req.user._id) ||
+            thing?.editors.find(_id => _id.toString() === req.user._id) ||
+            thing?.owner.toString() === req.user._id;
 
         if(!viewerOrGreater) {
             return next(new AppError('You do not have access to view this resource.', 401));
