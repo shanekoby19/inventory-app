@@ -30,7 +30,8 @@ const Item = ({ data, resource }) => {
 
             <div className='item__btns'>
                 <PrimaryButton 
-                    text={`Go To ${btnName}`} 
+                    text={`Go To ${btnName}`}
+                    type={'button'} // Prevent the action from being submitted.
                     handleClick={() => navigate(`/${resource.toLowerCase()}/${_id}`)} 
                 />
                 <PrimaryButton 
