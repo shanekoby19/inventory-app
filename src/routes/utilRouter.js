@@ -77,21 +77,7 @@ export const childIdActions = (resource) => {
                 return data.message;
             }
     
-            return data[singularResource];
-            
-        } else if(intent === 'delete') {
-            console.log(resource, id);
-            const response = await fetch(`http://localhost:8000/${resource}/${id}`, {
-                method: 'DELETE',
-                credentials: 'include',
-            });
-            const { message } = await response.json();
-            
-            if(message) {
-                return message;
-            }
-    
-            return 'Item deleted successfully.';
+            return data[singularResource];   
         }
     
         return submission

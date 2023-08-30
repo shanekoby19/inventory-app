@@ -44,28 +44,65 @@ const router = createBrowserRouter([
             element: <Shelf />,
             loader: getById('shelves', "shelfId"),
             action: childParentIdActions(),
+        }, {
+            ///////////////////////////// WAREHOUSE CONTAINERS /////////////////////////
+            path: ':parentId/containers/:childId',
+            exact: true,
+            element: <Container />,
+            loader: getById('containers', "containerId"),
+            action: childParentIdActions(),
+        }, {
+            ///////////////////////////// WAREHOUSE ITEMS /////////////////////////
+            path: ':parentId/items/:childId',
+            exact: true,
+            element: <Item />,
+            loader: getById('items', "itemId"),
+            action: childParentIdActions(),
         }]
     },
     {
         ////////////////////////////////// SHELVES ///////////////////////////////
-        path: '/shelves/:id',
+        path: '/shelves',
         element: <Layout />,
         action: childIdActions('shelves'),
         children: [{
-            index: true,
+            path: ':id',
+            exact: true,
             element: <Shelf />,
             loader: getById('shelves'),
+        }, {
+            ///////////////////////////// SHELF CONTAINERS /////////////////////////
+            path: ':parentId/containers/:childId',
+            exact: true,
+            element: <Container />,
+            loader: getById('containers', "containerId"),
+            action: childParentIdActions(),
+        }, {
+            ///////////////////////////// SHELF ITEMS /////////////////////////
+            path: ':parentId/items/:childId',
+            exact: true,
+            element: <Item />,
+            loader: getById('items', "itemId"),
+            action: childParentIdActions(),
         }]
     },
     {
         ////////////////////////////////// CONTAINERS ///////////////////////////////
-        path: '/containers/:id',
+        path: '/containers',
         element: <Layout />,
         action: childIdActions('containers'),
         children: [{
-            index: true,
+            path: ':id',
+            exact: true,
             element: <Container />,
             loader: getById('containers'),
+        }, {
+            ///////////////////////////// CONTAINER ITEMS /////////////////////////
+            path: ':parentId/items/:childId',
+            exact: true,
+            element: <Item />,
+            loader: getById('items', "itemId"),
+            action: childParentIdActions(),
         }]
     },
     {
